@@ -78,7 +78,7 @@ To add a new filter:
 
 ## Resources
 - **Live App**: [https://mrosd-dashboard-app-fhabbkt6qyyx5987f7srjp.streamlit.app](https://mrosd-dashboard-app-fhabbkt6qyyx5987f7srjp.streamlit.app)
-- **GitHub Repository**: [github.com/yourusername/violations-dashboard-streamlit](https://github.com/poncho-punch/violations-dashboard-streamlit)
+- **GitHub Repository**: [github.com/poncho-punch/violations-dashboard-streamlit](https://github.com/poncho-punch/violations-dashboard-streamlit)
 - **Google Sheet**: Contact the repository owner for access details (data source not publicly shared).
 - **Streamlit Documentation**: [docs.streamlit.io](https://docs.streamlit.io) for app development.
 - **Google Sheets API**: [developers.google.com/sheets/api](https://developers.google.com/sheets/api) for data integration.
