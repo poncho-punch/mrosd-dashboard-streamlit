@@ -42,18 +42,23 @@ locations = st.sidebar.multiselect(
     "Location", ['All'] + sorted(df['Location Group'].unique().tolist()), default=['All']
 )
 bicycle_type = st.sidebar.selectbox("Bicycle Type", ['All', 'Regular', 'E-Bike'], index=0)
+badge_numbers = st.sidebar.multiselect(
+    "Badge Number", ['All'] + sorted(df['Badge Number'].astype(str).unique().tolist()), default=['All']
+)
 start_date = st.sidebar.date_input("Start Date", df['Date and Time'].min().date())
 end_date = st.sidebar.date_input("End Date", df['Date and Time'].max().date())
 aggregation = st.sidebar.selectbox("Aggregation", ['Daily', 'Weekly', 'Monthly'], index=2)
 update_button = st.sidebar.button("Update Chart", type="primary")
 
 # Plotting function
-def plot_chart(locations, bicycle_type, start_date, end_date, aggregation):
+def plot_chart(locations, bicycle_type, badge_numbers, start_date, end_date, aggregation):
     filtered_df = df.copy()
     if 'All' not in locations:
         filtered_df = filtered_df[filtered_df['Location Group'].isin(locations)]
     if bicycle_type != 'All':
         filtered_df = filtered_df[filtered_df['Bicycle Type'] == bicycle_type]
+    if 'All' not in badge_numbers:
+        filtered_df = filtered_df[filtered_df['Badge Number'].astype(str).isin(badge_numbers)]
     if start_date > end_date:
         start_date, end_date = end_date, start_date
     filtered_df = filtered_df[
@@ -72,7 +77,7 @@ def plot_chart(locations, bicycle_type, start_date, end_date, aggregation):
     
     if grouped_df.empty or len(grouped_df) == 0 or all(grouped_df.iloc[:, 1:].sum() == 0):
         st.warning("No data to display for the selected filters.")
-        return
+        return None
 
     fig, ax = plt.subplots(figsize=(12, 6))
     contact_types = [col for col in grouped_df.columns if col != 'Time Period']
@@ -86,10 +91,12 @@ def plot_chart(locations, bicycle_type, start_date, end_date, aggregation):
     ax.tick_params(axis='x', rotation=45)
     ax.legend()
     plt.tight_layout()
-    st.pyplot(fig)
+    return fig
 
 # Display chart
 if update_button:
-    plot_chart(locations, bicycle_type, start_date, end_date, aggregation)
+    fig = plot_chart(locations, bicycle_type, badge_numbers, start_date, end_date, aggregation)
+    if fig:
+        st.pyplot(fig)
 else:
     st.write("Click 'Update Chart' to display the dashboard.")
